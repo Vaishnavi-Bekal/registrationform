@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Registration Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c248d 0%, #a073cc 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #010a31 10%, #4643d8 100%,#8498f5 0%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .form-section, .result-section {
+            padding: 40px;
+        }
+
+        .result-section {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label, .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .radio-group input, .checkbox-group input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #040c2c , #161558 ,#7286db );
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 90px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease ;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            margin-top: 15px;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .result-card {
+            background: #e2f0ff;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .result-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .result-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+            min-width: 180px;
+        }
+
+        .result-value {
+            color: #333;
+            flex: 1;
+        }
+
+        .success-icon {
+            text-align: center;
+            font-size: 60px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+
+            .form-section, .result-section {
+                padding: 20px;
+            }
+
+            .result-row {
+                flex-direction: column;
+            }
+
+            .result-label {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> Online Registration Form</h1>
+            <p>Fill out the form below to complete your registration</p>
+        </div>
+
+        <div class="form-section" id="formSection" >
+            <form id="registrationForm" method="POST" action = "connect.php">
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                    <span class="error" id="nameError">Please enter your full name</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                    <span class="error" id="emailError">Please enter a valid email</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                    <span class="error" id="phoneError">Please enter a valid phone number</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth *</label>
+                    <input type="date" id="dob" name="dob" required>
+                    <span class="error" id="dobError">Please select your date of birth</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender *</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="gender" value="Male" required> Male
+                        </label>
+                        <label>
+                            <input type="radio" name="gender" value="Female"> Female
+                        </label>
+                        <label>
+                            <input type="radio" name="gender" value="Other"> Other
+                        </label>
+                    </div>
+                    <span class="error" id="genderError">Please select a gender</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Select Course *</label>
+                    <select id="course" name="course" required>
+                        <option value="">-- Choose a course --</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Electronics Engineering">Electronics Engineering</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                        <option value="Civil Engineering">Civil Engineering</option>
+                        <option value="Business Administration">Business Administration</option>
+                    </select>
+                    <span class="error" id="courseError">Please select a course</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Skills (Select all that apply)</label>
+                    <div class="checkbox-group" >
+                        <label>
+                            <input type="checkbox" name="skills[]" value="Programming"> Programming
+                        </label>
+                        <label>
+                            <input type="checkbox" name="skills[]" value="Web Development"> Web Development
+                        </label>
+                        <label>
+                            <input type="checkbox" name="skills[]" value="Database"> Database
+                        </label>
+                        <label>
+                            <input type="checkbox" name="skills[]" value="Design"> Design
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address *</label>
+                    <textarea id="address" name="address" required></textarea>
+                    <span class="error" id="addressError">Please enter your address</span>
+                </div>
+
+                <button type="submit" class="btn">Submit Registration</button>
+            </form>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="success-icon">✓</div>
+            <div class="result-card">
+                <h2>Registration Successful!</h2>
+                <p style="color: #28a745; margin-bottom: 20px;">Your registration has been submitted successfully. Here are your details:</p>
+                
+                <div class="result-row">
+                    <div class="result-label">Full Name:</div>
+                    <div class="result-value" id="displayName"></div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Email Address:</div>
+                    <div class="result-value" id="displayEmail"></div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Phone Number:</div>
+                    <div class="result-value" id="displayPhone"></div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Date of Birth:</div>
+                    <div class="result-value" id="displayDob"></div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Gender:</div>
+                    <div class="result-value" id="displayGender"></div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Selected Course:</div>
+                    <div class="result-value" id="displayCourse"></div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Skills:</div>
+                    <div class="result-value" id="displaySkills"></div>
+                </div>
+                <div class="result-row">
+                    <div class="result-label">Address:</div>
+                    <div class="result-value" id="displayAddress"></div>
+                </div>
+            </div>
+            
+            <button class="btn btn-secondary" onclick="location.reload()">Submit Another Registration</button>
+        </div>
+    </div>
+
+   <script>
+$(document).ready(function() {
+    $('#registrationForm').on('submit', function(e) {
+        e.preventDefault(); // prevent reload
+
+        // Reset errors
+        $('.error').hide();
+        let isValid = true;
+
+        // --- Validation ---
+        if ($('#fullName').val().trim() === '') { $('#nameError').show(); isValid = false; }
+        if ($('#email').val().trim() === '' || !isValidEmail($('#email').val())) { $('#emailError').show(); isValid = false; }
+        if ($('#phone').val().trim() === '') { $('#phoneError').show(); isValid = false; }
+        if ($('#dob').val() === '') { $('#dobError').show(); isValid = false; }
+        if ($('input[name="gender"]:checked').length === 0) { $('#genderError').show(); isValid = false; }
+        if ($('#course').val() === '') { $('#courseError').show(); isValid = false; }
+        if ($('#address').val().trim() === '') { $('#addressError').show(); isValid = false; }
+
+        if (!isValid) return;
+
+        // Collect form data
+        const formData = {
+            fullName: $('#fullName').val(),
+            email: $('#email').val(),
+            phone: $('#phone').val(),
+            dob: $('#dob').val(),
+            gender: $('input[name="gender"]:checked').val(),
+            course: $('#course').val(),
+            skills: [],
+            address: $('#address').val()
+        };
+
+        // Collect selected skills
+        $('input[name="skills[]"]:checked').each(function() {
+            formData.skills.push($(this).val());
+        });
+
+        // Send data to PHP via AJAX
+        $.ajax({
+            url: 'connect.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                // Only show success card (don’t overwrite it)
+                displayResults(formData);
+            },
+            error: function() {
+                alert("Error submitting form.");
+            }
+        });
+    });
+
+    function isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function displayResults(data) {
+        $('#displayName').text(data.fullName);
+        $('#displayEmail').text(data.email);
+        $('#displayPhone').text(data.phone);
+        $('#displayDob').text(formatDate(data.dob));
+        $('#displayGender').text(data.gender);
+        $('#displayCourse').text(data.course);
+        $('#displaySkills').text(data.skills.length > 0 ? data.skills.join(', ') : 'None selected');
+        $('#displayAddress').text(data.address);
+
+        $('#formSection').fadeOut(400, function() {
+            $('#resultSection').fadeIn(400);
+        });
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+});
+</script>
+
+</body>
+</html>
